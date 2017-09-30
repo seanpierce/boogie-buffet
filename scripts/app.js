@@ -8,8 +8,6 @@ let display_event = function(event) {
       <img src="${this_event.image}">
     </div>
     `
-
-  console.log(this_event);
   return html;
 }
 

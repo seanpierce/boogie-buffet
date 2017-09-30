@@ -1,0 +1,12 @@
+#events {
+  margin: auto;
+  width: 94%;
+  max-width: 800px;
+}
+.event {
+  display: inline-block;
+  width: 32%;
+}
+.event img {
+  width: 100%;
+}

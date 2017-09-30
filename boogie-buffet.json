@@ -1,0 +1,24 @@
+{
+  "events" : {
+    "-Ku2AAEfTKb9QoIr-KRF" : {
+      "date" : "04\/20\/2018",
+      "time" : "69 pm",
+      "location" : "Eric's House",
+      "title" : "Boogie Buffet at Eric's House",
+      "age" : "69",
+      "cost" : "8",
+      "details" : "Ok, so this is goona be a dope one. I mean, REALLY dope.",
+      "links" : "www.eric.com, www.google.com"
+    },
+    "-Ku2AAEfTKb9QoIr-KRS" : {
+      "date" : "04\/20\/2019",
+      "time" : "69 pm",
+      "location" : "Eric's House 2",
+      "title" : "Boogie Buffet at Eric's House",
+      "age" : "69",
+      "cost" : "8",
+      "details" : "Ok, so this is goona be a dope one. I mean, REALLY dope. Even doper than last year!",
+      "links" : "www.eric.com, www.google.com"
+    }
+  }
+}

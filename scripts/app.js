@@ -2,12 +2,16 @@
 let display_event = function(event) {
   let key = event.key;
   let this_event = event.val();
-  let html = "<p>hello</p>"
+  let html =
+    `
+    <div class="event" id="${key}">
+      <img src="${this_event.image}">
+    </div>
+    `
 
   console.log(this_event);
   return html;
 }
-
 
 // ------------------------------ document ready
 // ------------------------------ document ready

@@ -1,3 +1,3 @@
 $(function() {
-  alert();
+  console.log(events);
 });

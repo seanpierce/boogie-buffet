@@ -9,18 +9,21 @@
     <script src="https://www.gstatic.com/firebasejs/4.4.0/firebase.js"></script>
     <!-- firebase keys/ Initialization -->
     <script type="text/javascript" src="inc/firebase.js"></script>
-    <!-- connect custom js and css -->
+    <!-- connect custom fonts, js, and css -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <script type="text/javascript" src="scripts/login.js"></script>
     <link rel="stylesheet" href="styles/styles.css">
   </head>
   <body>
 
     <div class="login-wrapper">
-      <input id="email" type="email" placeholder="Email" autofocus>
-      <input id="password" type="password" placeholder="Password">
-      <br>
-      <button id="log-in">Log In</button>
-      <button id="log-out">Log Out</button>
+      <h3>Boogie Buffet 🍤</h3>
+      <form id="log-in-form">
+        <input id="email-input" type="email" placeholder="Email" autofocus>
+        <input id="password-input" type="password" placeholder="Password">
+        <br>
+        <input type="submit" value="Log In">
+      </form>
     </div>
 
   </body>

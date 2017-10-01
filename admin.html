@@ -9,11 +9,37 @@
     <script src="https://www.gstatic.com/firebasejs/4.4.0/firebase.js"></script>
     <!-- firebase keys/ Initialization -->
     <script type="text/javascript" src="inc/firebase.js"></script>
-    <!-- connect custom js and css -->
+    <!-- connect custom fonts, js, and css -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <script type="text/javascript" src="scripts/admin.js"></script>
     <link rel="stylesheet" href="styles/styles.css">
   </head>
   <body>
+    <div class="container">
+      <h3>Welcome <span id="username"></span></h3>
 
+      <div class="actions">
+        <a href="index.html">View Site</a>
+        <a id="log-out-link" href="#">Log Out</a>
+      </div>
+
+      <form id="new-event">
+        <h4>Add a new event</h4>
+        <input type="text" id="new-event-title" placeholder="title">
+        <input type="text" id="new-event-date" placeholder="date">
+        <input type="text" id="new-event-time" placeholder="time">
+        <input type="text" id="new-event-location" placeholder="location">
+        <input type="text" id="new-event-cost" placeholder="cost">
+        <input type="text" id="new-event-age" placeholder="age">
+        <input type="text" id="new-event-image" placeholder="image">
+        <!-- <progress value="0" max="100" id="image-progress">0%</progress>
+        <input type="file" id="new-event-image" value="upload">
+        <span id="message"></span> -->
+        <textarea id="new-event-details" placeholder="event details"></textarea>
+        <input type="text" id="new-event-links" placeholder="links (full links, separated by commas)">
+        <input type="submit" value="Add Event">
+      </form>
+
+    </div>
   </body>
 </html>

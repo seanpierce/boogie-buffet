@@ -17,6 +17,8 @@ let display_event = function(event) {
 
 $(function() {
   ref.on("value", function(snapshot) {
+    // hide loading animation
+    $('#loading').hide();
     // erase all prev events
     $('.event').remove();
     snapshot.forEach(function(event) {

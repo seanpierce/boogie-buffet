@@ -1,13 +1,21 @@
+// authenticate admin route
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    // if user is logged in, redirect to admin
+    window.location = 'admin.html';
+  }
+});
+
 $(function() {
 
   // get elements
-  const emailInput = $('#email');
-  const passwordInput = $('#password');
-  const logInButton = $('#log-in');
-  const logOutButton = $('#log-out');
+  const emailInput = $('#email-input');
+  const passwordInput = $('#password-input');
+  const logInForm = $('#log-in-form');
 
   // add login event
-  logInButton.click(function() {
+  logInForm.click(function(e) {
+    e.preventDefault();
     // get email and password
     const email = emailInput.val();
     const password = passwordInput.val();
@@ -19,11 +27,6 @@ $(function() {
     // log in
     const promise = auth.signInWithEmailAndPassword(email, password);
     promise.catch(e => console.log(e.message));
-  });
-
-  // sign out
-  logOutButton.click(function() {
-    firebase.auth().signOut();
   });
 
   // add realtime authentication listener

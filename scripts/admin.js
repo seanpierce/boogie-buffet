@@ -2,60 +2,41 @@
 firebase.auth().onAuthStateChanged(user => {
   if (!user) {
     // if user is not logged in, redirect to index
-    window.location = 'index.html';
+    window.location = 'login.html';
+  } else {
+    $('#username').text(user.email);
   }
 });
 
-// image uploader
-let uploader = function() {
-  // get elements
-  let uplaoder = $('#uploader');
-  let fileButton = $('#fileButton');
-  let message = $('#message');
-  let element = $('#img-container');
-  // listen for file selection
-  fileButton.addEventListener('change', function(e) {
-
-    // get file
-    let file = e.target.files[0];
-
-    // create storage ref
-    let storageRef = firebase.storage().ref('uploads/' + file.name);
-
-    // uploade file
-    let uploading = storageRef.put(file).then(function(snapshot) {
-      let imgUrl = snapshot.downloadURL;
-      // append image to page
-      element.innerHTML = "<img src='" + imgUrl + "'>";
-    }).catch(function(err) {
-      console.log(err);
-    });
-
-    // create task to show progress
-    let task = storageRef.put(file);
-
-    // update progress bar
-    task.on('state_changed',
-
-      function progress(snapshot) {
-        // this will update progress bar
-        let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        uploader.value = percentage;
-        message.style.display ='none';
-      },
-      function error(err) {
-        // error handling
-        message.style.display ='block';
-        message.innerHTML ='Failed to upload file!';
-      },
-      function complete() {
-        // executes when file is finished uploading
-        message.style.display ='block';
-        message.innerHTML ='Upload Successful!';
-      }
-
-    );
+// create new event function
+let create_new_event = function(title, date, time, location, cost, age, image, details, links, ref) {
+  let newEvent = ref.push();
+  newEvent.set({
+    title: title,
+    date: date,
+    time: time,
+    location: location,
+    cost: cost,
+    age: age,
+    image: image,
+    details: details,
+    links: links
   });
+}
+
+// delete event
+let functionality_for_deletable_events = function(events) {
+  // delete item
+  // can only be applied after items are printed
+  $('.delete_item').click(function() {
+    let key = $(this).attr('data-key');
+    if (confirm('Are you sure you want to delete this item?')) {
+      delete_item(ref, key);
+    }
+  });
+}
+let delete_item = function(ref, key) {
+  ref.child(key).remove();
 }
 
 // ------------------------------ document ready
@@ -64,11 +45,34 @@ let uploader = function() {
 
 $(function() {
   ref.on("value", function(snapshot) {
-    $('.event').remove();
+    // do something
     snapshot.forEach(function(event) {
       // do something with the events
     });
   }, function (error) {
     console.log("Error: " + error.code);
   });
+
+  // log out
+  $('#log-out-link').click(function() {
+    firebase.auth().signOut();
+  });
+
+  // submit new event
+  $('#new-event').submit(function(e) {
+    e.preventDefault();
+    let title = $('#new-event-title').val();
+    let date = $('#new-event-date').val();
+    let time = $('#new-event-time').val();
+    let location = $('#new-event-location').val();
+    let cost = $('#new-event-title').val();
+    let age = $('#new-event-age').val();
+    let image = $('#new-event-image').val();
+    let details = $('#new-event-details').val();
+    let links = $('#new-event-links').val();
+
+    create_new_event(title, date, time, location, cost, age, image, details, links, ref);
+    $('#new-event').trigger('reset');
+  });
+
 });

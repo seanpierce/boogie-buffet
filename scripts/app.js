@@ -4,16 +4,13 @@ let display_event = function(event) {
   let this_event = event.val();
   let html =
     `
-    <div class="event" data-key="${key}">
-      <img src="${this_event.image}" class="event-image">
-      <ul class="hover-details">
-        <li class="event-title">${this_event.title}</li>
-        <li class="event-date">${this_event.date}</li>
-        <li class="event-time">${this_event.time}</li>
-        <li class="event-cost">$${this_event.cost}</li>
-        <li class="event-location">${this_event.location}</li>
-        <li class="event-age">${this_event.age}</li>
-      </ul>
+    <div class="event" data-key="${key}" style="background-image:url(${this_event.image});">
+      <div class="event-content-hover-overlay">
+        <ul class="hover-details">
+          <li class="event-title">${this_event.title}</li>
+          <li class="event-date">${convertDateShort(this_event.date)}</li>
+        </ul>
+      </div>
     </div>
     `
   return html;
@@ -47,6 +44,9 @@ let convertTime = function(time) {
 let convertDate = function(date) {
   return moment(date, 'YYYY-MM-DD').format("dddd, MMM Do, YYYY")
 }
+let convertDateShort = function(date) {
+  return moment(date, 'YYYY-MM-DD').format("MMM Do, YYYY")
+}
 
 
 // ------------------------------ document ready
@@ -54,7 +54,7 @@ let convertDate = function(date) {
 // ------------------------------ document ready
 
 $(function() {
-  ref.on("value", function(snapshot) {
+  ref.on('value', function(snapshot) {
     // hide loading animation
     $('#loading').hide();
     // erase all prev events
@@ -62,10 +62,15 @@ $(function() {
     snapshot.forEach(function(event) {
       // print events to page
       $('#events').append(display_event(event));
-      // click function for events
-      $('.event').click(function() {
-        // function to display event as overlay
-        viewEventDetails(event);
+    });
+    // display event modal on click
+    $('.event').click(function() {
+      let key = $(this).attr('data-key');
+      let eventRef = firebase.database().ref(`events/${key}`);
+      eventRef.on('value', function(snapshot) {
+        // populate overlay modal with event details
+        viewEventDetails(snapshot);
+        // close overlay modal when "X" is clicked
         $('.close-overlay').click(function() {
           $('#overlay').hide();
         });

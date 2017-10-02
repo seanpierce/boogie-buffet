@@ -8,10 +8,20 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
+// success message
+let successMessage = function(eventTitle) {
+  $('#success-message').css('color', 'green')
+  $('#success-message').html(`${eventTitle} successfully added!`);
+  setTimeout(function() {
+    // clear success-message
+    $('#success-message').html("");
+  }, 5000);
+}
+
 // create new event function
 let create_new_event = function(title, date, time, location, cost, age, image, details, links, ref) {
   let newEvent = ref.push();
-  newEvent.set({
+  if (newEvent.set({
     title: title,
     date: date,
     time: time,
@@ -21,7 +31,9 @@ let create_new_event = function(title, date, time, location, cost, age, image, d
     image: image,
     details: details,
     links: links
-  });
+  })) {
+    successMessage(title);
+  };
 }
 
 // instantiate image url for form submission
@@ -79,18 +91,25 @@ $(function() {
   // submit new event to database
   $('#new-event').submit(function(e) {
     e.preventDefault();
+    // get input values
     let title = $('#new-event-title').val();
     let date = $('#new-event-date').val();
     let time = $('#new-event-time').val();
     let location = $('#new-event-location').val();
     let cost = $('#new-event-title').val();
     let age = $('#new-event-age').val();
+    // image comes from the imgURL variable declared above
     let details = $('#new-event-details').val();
     let links = $('#new-event-links').val();
 
     create_new_event(title, date, time, location, cost, age, imgURL, details, links, ref);
 
-    // TODO: clear form, alert user that upload was successfull
+    // clear inputs
+    $('#new-event')[0].reset();
+
+    // clear image uploadProgress message
+    uploadProgress.text('');
+
   });
 
 });

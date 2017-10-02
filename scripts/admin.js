@@ -106,7 +106,7 @@ $(function() {
     let date = $('#new-event-date').val();
     let time = $('#new-event-time').val();
     let location = $('#new-event-location').val();
-    let cost = $('#new-event-title').val();
+    let cost = $('#new-event-cost').val();
     let age = $('#new-event-age').val();
     // image comes from the imgURL variable declared above
     let details = $('#new-event-details').val();
@@ -114,8 +114,10 @@ $(function() {
 
     create_new_event(title, date, time, location, cost, age, imgURL, details, links, ref);
 
-    // clear inputs
+    // clear form inputs
     $('#new-event')[0].reset();
+    $('#new-event-date').removeClass('has-value');
+    $('#new-event-time').removeClass('has-value');
 
     // clear image uploadProgress message
     uploadProgress.text('');

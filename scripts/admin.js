@@ -8,7 +8,18 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
-// success message
+// display li to admin-events-list
+let adminEventDisplay = function(event) {
+  let this_key = event.key;
+  let this_event = event.val();
+  let html =
+  `
+  <li><span class="delete-event" data-image="${this_event.image}" data-key="${this_key}">✕</span>${this_event.title}</li>
+  `
+  return html
+}
+
+// add new event success message
 let successMessage = function(eventTitle) {
   $('#success-message').html(`${eventTitle} successfully added!`);
   setTimeout(function() {
@@ -47,8 +58,39 @@ let create_new_event = function(title, date, time, location, cost, age, image, d
   };
 }
 
+let delete_event = function(key, image, ref) {
+  ref.child(key).remove();
+}
+
 // instantiate image url for form submission
 let imgURL;
+
+// image upload functionality
+let imageUpload = function(e) {
+  let uploadProgress = $('#upload-progress');
+  // get file (variable declared above, for use later)
+  let file = e.target.files[0];
+  // create storage ref
+  let storageRef = firebase.storage().ref('images/' + file.name);
+  // upload file
+  let task = storageRef.put(file);
+  // update progress bar
+  task.on('state_changed',
+    function progress(snapshot) {
+      let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      uploadProgress.css('color', 'inherit');
+      uploadProgress.text(Math.floor(percentage) + '%');
+    },
+    function error(err) {
+      console.log(err);
+    },
+    function complete() {
+      // once finished, set image url for form submission
+      imgURL = task.snapshot.downloadURL;
+      uploadComplete(uploadProgress, file.name, imgURL);
+    }
+  );
+}
 
 // ------------------------------ document ready
 // ------------------------------ document ready
@@ -56,9 +98,20 @@ let imgURL;
 
 $(function() {
   ref.on("value", function(snapshot) {
-    // do something
+    // clear admin events list
+    $('#admin-events-list').html('');
     snapshot.forEach(function(event) {
-      // do something with the events
+      // list events for admin to delete
+      $('#admin-events-list').append(adminEventDisplay(event));
+    });
+    // delete single event function
+    $('.delete-event').click(function() {
+      let key = $(this).attr('data-key');
+      let image = $(this).attr('data-image');
+      let ref = firebase.database().ref("events/");
+      if (confirm('Are you sure you want to delete this event?')) {
+        delete_event(key, image, ref);
+      }
     });
   }, function (error) {
     console.log("Error: " + error.code);
@@ -69,33 +122,10 @@ $(function() {
     firebase.auth().signOut();
   });
 
-  // image upload
-  let uploadProgress = $('#upload-progress');
   let fileButton = $('#file-button');
   // listen for file selection
   fileButton.change(function(e) {
-    // get file (variable declared above, for use later)
-    let file = e.target.files[0];
-    // create storage ref
-    let storageRef = firebase.storage().ref('images/' + file.name);
-    // upload file
-    let task = storageRef.put(file);
-    // update progress bar
-    task.on('state_changed',
-      function progress(snapshot) {
-        let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        uploadProgress.css('color', 'inherit');
-        uploadProgress.text(Math.floor(percentage) + '%');
-      },
-      function error(err) {
-        console.log(err);
-      },
-      function complete() {
-        // once finished, set image url for form submission
-        imgURL = task.snapshot.downloadURL;
-        uploadComplete(uploadProgress, file.name, imgURL);
-      }
-    );
+    imageUpload(e);
   });
 
   // submit new event to database
@@ -120,7 +150,7 @@ $(function() {
     $('#new-event-time').removeClass('has-value');
 
     // clear image uploadProgress message
-    uploadProgress.text('');
+    $('#upload-progress').text('');
 
   });
 

@@ -197,7 +197,22 @@ body {
   vertical-align: middle;
   margin-top: -4px;
 }
-
+#admin-events-list {
+  list-style: none;
+  padding: 0;
+}
+#admin-events-list li {
+  padding: 5px;
+}
+#admin-events-list li:nth-child(odd) {
+  background-color: #333;
+  color: white;
+}
+.delete-event {
+  color: red;
+  margin-right: 5px;
+  cursor: pointer;
+}
 /* --------------------------------- media queries */
 /* --------------------------------- media queries */
 /* --------------------------------- media queries */

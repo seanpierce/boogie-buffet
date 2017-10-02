@@ -109,6 +109,11 @@
   border: solid 1px #333;
   background-color: white;
 }
-#new-event input[type=file] {
-  border: none;
+#new-event label#file-button-label {
+  display: inline-block;
+  width: auto;
+  margin-bottom: 1em;
+  border: solid 1px #333;
+  background-color: white;
+  padding: 5px;
 }

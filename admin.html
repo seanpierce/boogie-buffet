@@ -32,7 +32,8 @@
         <input type="text" id="new-event-location" placeholder="location">
         <input type="text" id="new-event-cost" placeholder="cost">
         <input type="text" id="new-event-age" placeholder="age">
-        <input type="file" id="file-button" value="upload" required>
+        <label for="file-button" id="file-button-label">Upload an image</label>
+        <input type="file" id="file-button" name="file-button" value="upload" required style="display:none;">
         <span id="upload-progress"></span>
         <textarea id="new-event-details" placeholder="event details"></textarea>
         <input type="text" id="new-event-links" placeholder="links (full links, separated by commas)">

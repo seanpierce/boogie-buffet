@@ -26,17 +26,22 @@
       <form id="new-event">
         <div id="success-message"></div>
         <h4>Add a new event</h4>
-        <input type="text" id="new-event-title" placeholder="title">
-        <input type="date" id="new-event-date" placeholder="date">
-        <input type="time" id="new-event-time" placeholder="09:30 pm">
-        <input type="text" id="new-event-location" placeholder="location">
-        <input type="text" id="new-event-cost" placeholder="cost">
-        <input type="text" id="new-event-age" placeholder="age">
+        <input type="text" id="new-event-title" placeholder="Title">
+        <input type="date" id="new-event-date" placeholder="Date &nbsp;" onchange="this.className=(this.value!=''?'has-value':'')">
+        <input type="time" id="new-event-time" placeholder="Time &nbsp;" onchange="this.className=(this.value!=''?'has-value':'')">
+        <input type="text" id="new-event-location" placeholder="Location">
+        <input type="text" id="new-event-cost" placeholder="Cost (leave blank if free)">
+        <select id="new-event-age">
+          <option value="" selected="selected" disabled>Age Restrictions</option>
+          <option value="All Ages">All Ages</option>
+          <option value="18+">18+</option>
+          <option value="21+">21+</option>
+        </select>
         <label for="file-button" id="file-button-label">Upload an image</label>
         <input type="file" id="file-button" name="file-button" value="upload" required style="display:none;">
         <span id="upload-progress"></span>
-        <textarea id="new-event-details" placeholder="event details"></textarea>
-        <input type="text" id="new-event-links" placeholder="links (full links, separated by commas)">
+        <textarea id="new-event-details" placeholder="Event Details"></textarea>
+        <input type="text" id="new-event-links" placeholder="Links (full urls, separated by commas)">
         <input type="submit" value="Submit">
       </form>
 

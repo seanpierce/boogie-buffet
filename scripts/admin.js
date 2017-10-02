@@ -10,7 +10,6 @@ firebase.auth().onAuthStateChanged(user => {
 
 // success message
 let successMessage = function(eventTitle) {
-  $('#success-message').css('color', 'green')
   $('#success-message').html(`${eventTitle} successfully added!`);
   setTimeout(function() {
     // clear success-message
@@ -19,13 +18,11 @@ let successMessage = function(eventTitle) {
 }
 
 // upload complete message
-let uploadComplete = function(uploadProgress, filename) {
-  uploadProgress.html(`Upload complete! <span id="cancel-upload">(cancel)</span>`);
-  uploadProgress.css('color', 'green');
-  $('#cancel-upload').css('color', 'red');
+let uploadComplete = function(uploadProgress, filename, imgURL) {
+  let fileRef = firebase.storage().ref('images/' + filename);
+  uploadProgress.html(`<img src="${imgURL}" class="thumbnail"> - ${filename} <span id="cancel-upload">(cancel)</span>`);
   // cancel (delete) uploaded file
   $('#cancel-upload').click(function() {
-    let fileRef = firebase.storage().ref('images/' + filename);
     fileRef.delete();
     // reset, clear progress message
     uploadProgress.html('');
@@ -94,9 +91,9 @@ $(function() {
         console.log(err);
       },
       function complete() {
-        uploadComplete(uploadProgress, file.name);
         // once finished, set image url for form submission
         imgURL = task.snapshot.downloadURL;
+        uploadComplete(uploadProgress, file.name, imgURL);
       }
     );
   });

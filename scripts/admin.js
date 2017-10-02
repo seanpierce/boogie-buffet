@@ -24,20 +24,8 @@ let create_new_event = function(title, date, time, location, cost, age, image, d
   });
 }
 
-// delete event
-let functionality_for_deletable_events = function(events) {
-  // delete item
-  // can only be applied after items are printed
-  $('.delete_item').click(function() {
-    let key = $(this).attr('data-key');
-    if (confirm('Are you sure you want to delete this item?')) {
-      delete_item(ref, key);
-    }
-  });
-}
-let delete_item = function(ref, key) {
-  ref.child(key).remove();
-}
+// instantiate image url variable, for uploader use later
+let imgURL;
 
 // ------------------------------ document ready
 // ------------------------------ document ready
@@ -57,6 +45,35 @@ $(function() {
   $('#log-out-link').click(function() {
     firebase.auth().signOut();
   });
+
+  // image uploader
+  let uploadProgress = $('#upload-progress');
+  let fileButton = $('#file-button');
+  // listen for file selection
+  fileButton.change(function(e) {
+    // get file (variable declared above, for use later)
+    file = e.target.files[0];
+    // create storage ref
+    let storageRef = firebase.storage().ref('images/' + file.name);
+    // upload file
+    let task = storageRef.put(file);
+    // update progress bar
+    task.on('state_changed',
+      function progress(snapshot) {
+        let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        uploadProgress.text(Math.floor(percentage) + '%');
+      },
+      function error(err) {
+        console.log(err);
+      },
+      function complete() {
+        uploadProgress.text('Upload Complete');
+        uploadProgress.css('color', 'green');
+      }
+    );
+  });
+
+  // TODO: extract the file's downloadURL and set it as variable for use when submitting form
 
   // submit new event
   $('#new-event').submit(function(e) {

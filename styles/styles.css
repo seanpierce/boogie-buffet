@@ -3,13 +3,8 @@
 /* --------------------------------- global styles */
 
 body {
-  font-family: 'Lato', sans-serif;
   color: #333;
-}
-.container {
-  margin: auto;
-  width: 94%;
-  max-width: 600px;
+  margin: 2em 0;
 }
 #loading {
   text-align: center;
@@ -23,15 +18,41 @@ body {
 /* --------------------------------- index styles */
 /* --------------------------------- index styles */
 
+.shrimpy {
+  width: 100%;
+}
 .event {
   display: inline-block;
   width: 32%;
+  height: 0;
+  padding-bottom: 32%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
 }
-.event img {
+.event-content-hover-overlay {
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  transition: all 0.25s;
+}
+.event:hover .event-content-hover-overlay {
+  opacity: 1;
 }
 .hover-details {
-  display: none;
+  text-align: center;
+  color: white;
+  list-style: none;
+  padding: 5px;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 #overlay {
   display: none;
@@ -53,6 +74,7 @@ body {
 }
 #overlay-content .event-image {
   width: 100%;
+  margin-bottom: 1em;
 }
 #overlay-content ul {
   list-style: none;
@@ -61,7 +83,7 @@ body {
 .close-overlay {
   width: 25px;
   cursor: pointer;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 /* --------------------------------- login styles */
 /* --------------------------------- login styles */
@@ -161,7 +183,6 @@ body {
 #new-event input[type="time"]:not(.has-value):before,
 #new-event input[type="date"]:not(.has-value):before {
   color: #a2a2a2;
-  font-family: 'Lato', sans-serif;
   content: attr(placeholder);
 }
 #cancel-upload {

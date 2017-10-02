@@ -4,7 +4,7 @@ let display_event = function(event) {
   let this_event = event.val();
   let html =
     `
-    <div class="event" id="${key}">
+    <div class="event" data-key="${key}">
       <img src="${this_event.image}">
     </div>
     `

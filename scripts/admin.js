@@ -15,7 +15,21 @@ let successMessage = function(eventTitle) {
   setTimeout(function() {
     // clear success-message
     $('#success-message').html("");
-  }, 5000);
+  }, 10000);
+}
+
+// upload complete message
+let uploadComplete = function(uploadProgress, filename) {
+  uploadProgress.html(`Upload complete! <span id="cancel-upload">(cancel)</span>`);
+  uploadProgress.css('color', 'green');
+  $('#cancel-upload').css('color', 'red');
+  // cancel (delete) uploaded file
+  $('#cancel-upload').click(function() {
+    let fileRef = firebase.storage().ref('images/' + filename);
+    fileRef.delete();
+    // reset, clear progress message
+    uploadProgress.html('');
+  });
 }
 
 // create new event function
@@ -80,8 +94,7 @@ $(function() {
         console.log(err);
       },
       function complete() {
-        uploadProgress.text('Upload Complete');
-        uploadProgress.css('color', 'green');
+        uploadComplete(uploadProgress, file.name);
         // once finished, set image url for form submission
         imgURL = task.snapshot.downloadURL;
       }

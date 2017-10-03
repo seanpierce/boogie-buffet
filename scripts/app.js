@@ -36,25 +36,12 @@ let viewEventDetails = function(event) {
   );
 }
 
-// convert 24 hour time to standard time
-let convertTime = function(time) {
-  return moment(time, 'HH:mm:ss').format('h:mm A');
-}
-// convert js standard date to friendlier format
-let convertDate = function(date) {
-  return moment(date, 'YYYY-MM-DD').format("dddd, MMM Do, YYYY")
-}
-let convertDateShort = function(date) {
-  return moment(date, 'YYYY-MM-DD').format("MMM Do, YYYY")
-}
-
-
 // ------------------------------ document ready
 // ------------------------------ document ready
 // ------------------------------ document ready
 
 $(function() {
-  ref.on('value', function(snapshot) {
+  ref.orderByChild('date').on('value', function(snapshot) {
     // hide loading animation
     $('#loading').hide();
     // erase all prev events

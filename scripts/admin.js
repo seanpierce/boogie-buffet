@@ -35,6 +35,8 @@ let uploadComplete = function(uploadProgress, filename, imgURL) {
   // cancel (delete) uploaded file
   $('#cancel-upload').click(function() {
     fileRef.delete();
+    // reset file-button value
+    $('#file-button').val("");
     // reset, clear progress message
     uploadProgress.html('');
   });
@@ -62,7 +64,6 @@ let create_new_event = function(title, date, time, location, cost, age, image, d
 let delete_event = function(key, image, ref) {
   ref.child(key).remove();
   let imageRef = firebase.storage().refFromURL(image);
-
   // delete associated image along with event
   imageRef.delete().then(function() {
     // file deleted successfully
@@ -113,6 +114,15 @@ let imageUpload = function(e) {
   );
 }
 
+// if user uploads an image, but then tries to refresh page, delete image
+let confirmRefresh = function(fileButton) {
+  window.onbeforeunload = function(event) {
+    if (fileButton.val() != "") {
+      return confirm("You haven't finished adding the new event. Continue?");
+    }
+  };
+}
+
 // ------------------------------ document ready
 // ------------------------------ document ready
 // ------------------------------ document ready
@@ -157,6 +167,7 @@ $(function() {
   // listen for file selection
   fileButton.change(function(e) {
     imageUpload(e);
+    confirmRefresh(fileButton);
   });
 
   // submit new event to database

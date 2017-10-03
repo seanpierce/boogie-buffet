@@ -4461,3 +4461,16 @@ hooks.prototype             = proto;
 return hooks;
 
 })));
+
+// date conversions, to be used globally
+// convert 24 hour time to standard time
+let convertTime = function(time) {
+  return moment(time, 'HH:mm:ss').format('h:mm A');
+}
+// convert js standard date to friendlier format
+let convertDate = function(date) {
+  return moment(date, 'YYYY-MM-DD').format("dddd, MMM Do, YYYY")
+}
+let convertDateShort = function(date) {
+  return moment(date, 'YYYY-MM-DD').format("MMM Do, YYYY")
+}

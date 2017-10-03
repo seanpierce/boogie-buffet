@@ -71,6 +71,18 @@ let delete_event = function(key, image, ref) {
   });
 }
 
+// purge old events
+let purgeOldEvents = function(events) {
+  events.forEach(function(event) {
+    if (Date.parse(event.val().date) < Date.now()) {
+      let key = event.key
+      let image = event.val().image
+      let ref = firebase.database().ref("events/");
+      delete_event(key, image, ref);
+    }
+  });
+}
+
 // instantiate image url for form submission
 let imgURL;
 
@@ -125,6 +137,15 @@ $(function() {
     });
   }, function (error) {
     console.log("Error: " + error.code);
+  });
+
+  // purge old events click handler
+  $('#purge-old-events').click(function() {
+    if (confirm('Are you sure you\'d like to purge old events?')) {
+      ref.on("value", function(snapshot) {
+        purgeOldEvents(snapshot);
+      });
+    }
   });
 
   // log out

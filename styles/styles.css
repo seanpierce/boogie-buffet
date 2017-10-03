@@ -178,7 +178,6 @@ body {
   display: block;
   font-size: 1em;
   border: solid 1px #333;
-  padding: 5px;
 }
 #new-event input[type="time"]:not(.has-value):before,
 #new-event input[type="date"]:not(.has-value):before {

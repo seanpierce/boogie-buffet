@@ -124,7 +124,7 @@ $(function() {
     $('#admin-events-list').html('');
     snapshot.forEach(function(event) {
       // list events for admin to delete
-      $('#admin-events-list').prepend(adminEventDisplay(event));
+      $('#admin-events-list').append(adminEventDisplay(event));
     });
     // delete single event function
     $('.delete-event').click(function() {

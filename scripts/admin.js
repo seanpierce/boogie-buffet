@@ -21,7 +21,7 @@ let adminEventDisplay = function(event) {
 
 // add new event success message
 let successMessage = function(eventTitle) {
-  $('#success-message').html(`${eventTitle} successfully added!`);
+  $('#success-message').html(`${eventTitle}, successfully added!`);
   setTimeout(function() {
     // clear success-message
     $('#success-message').html("");
@@ -58,8 +58,17 @@ let create_new_event = function(title, date, time, location, cost, age, image, d
   };
 }
 
+// delete single event
 let delete_event = function(key, image, ref) {
   ref.child(key).remove();
+  let imageRef = firebase.storage().refFromURL(image);
+
+  // delete associated image along with event
+  imageRef.delete().then(function() {
+    // file deleted successfully
+  }).catch(function(err) {
+    console.log(err);
+  });
 }
 
 // instantiate image url for form submission
@@ -97,12 +106,13 @@ let imageUpload = function(e) {
 // ------------------------------ document ready
 
 $(function() {
-  ref.on("value", function(snapshot) {
+  let now = Date.now();
+  ref.orderByChild('date').on("value", function(snapshot) {
     // clear admin events list
     $('#admin-events-list').html('');
     snapshot.forEach(function(event) {
       // list events for admin to delete
-      $('#admin-events-list').append(adminEventDisplay(event));
+      $('#admin-events-list').prepend(adminEventDisplay(event));
     });
     // delete single event function
     $('.delete-event').click(function() {

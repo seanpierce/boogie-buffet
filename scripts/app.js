@@ -41,14 +41,23 @@ let viewEventDetails = function(event) {
 // ------------------------------ document ready
 
 $(function() {
+  let now = Date.now();
+  // retrieve events by date
   ref.orderByChild('date').on('value', function(snapshot) {
     // hide loading animation
     $('#loading').hide();
     // erase all prev events
     $('.event').remove();
     snapshot.forEach(function(event) {
-      // print events to page
-      $('#events').append(display_event(event));
+      // if event has not happened yet
+      if (Date.parse(event.val().date) > Date.now()) {
+        // print event to page
+        $('#upcoming-events').append(display_event(event));
+        // else (event has already happened)
+      } else {
+        // print event to page
+        $('#past-events').append(display_event(event));
+      }
     });
     // display event modal on click
     $('.event').click(function() {

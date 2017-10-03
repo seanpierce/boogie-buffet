@@ -19,7 +19,7 @@ let display_event = function(event) {
 // display events overlay
 let viewEventDetails = function(event) {
   let this_event = event.val();
-  $('#overlay').show();
+  $('#overlay').fadeIn(125);
   $('#overlay-content').html(
     `
     <img src="assets/x.png" class="close-overlay">
@@ -68,7 +68,7 @@ $(function() {
         viewEventDetails(snapshot);
         // close overlay modal when "X" is clicked
         $('.close-overlay').click(function() {
-          $('#overlay').hide();
+          $('#overlay').fadeOut(125);
         });
       });
     });

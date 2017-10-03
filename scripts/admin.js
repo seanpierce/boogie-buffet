@@ -14,7 +14,7 @@ let adminEventDisplay = function(event) {
   let this_event = event.val();
   let html =
   `
-  <li><span class="delete-event" data-image="${this_event.image}" data-key="${this_key}">✕</span>${this_event.title}</li>
+  <li><span class="delete-event" data-image="${this_event.image}" data-key="${this_key}">✕</span>${this_event.title}, ${convertDateShort(this_event.date)}</li>
   `
   return html
 }

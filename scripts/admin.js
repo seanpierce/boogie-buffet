@@ -14,7 +14,11 @@ let adminEventDisplay = function(event) {
   let this_event = event.val();
   let html =
   `
-  <li><span class="delete-event" data-image="${this_event.image}" data-key="${this_key}">✕</span>${this_event.title}, ${convertDateShort(this_event.date)}</li>
+  <li>
+    <span class="delete-event" data-image="${this_event.image}" data-key="${this_key}">✕</span>
+    <span class="edit-event" data-key="${this_key}"><img src="assets/pen.png"></span>
+    ${this_event.title}, ${convertDateShort(this_event.date)}
+  </li>
   `
   return html
 }
@@ -69,6 +73,56 @@ let delete_event = function(key, image, ref) {
     // file deleted successfully
   }).catch(function(err) {
     console.log(err);
+  });
+}
+
+// set event edits in database
+let edit_event = function(event_details, currentEventKey) {
+  // query db for event using key, set values
+  let updated_event = firebase.database().ref(`events/${currentEventKey}`).set({
+    title: event_details.title.val(),
+    date: event_details.date.val(),
+    time: event_details.time.val(),
+    location: event_details.location.val(),
+    cost: event_details.cost.val(),
+    age: event_details.age.val(),
+    details: event_details.details.val(),
+    links: event_details.links.val(),
+    image: event_details.image
+  });
+  console.log(updated_event);
+}
+
+// show and set values for edit event form
+let showEditEventForm = function(snapshot, ref) {
+  $('#edit-modal').fadeIn(125);
+  let currentEventKey = snapshot.key;
+  let event = snapshot.val();
+  let currentImageRef = firebase.storage().refFromURL(event.image);
+  // create object to store and pass values
+  let event_details = new Object();
+  // set form values equal to current event values
+  $('#edit-event-title-span').text(`${event.title}`);
+  $('#edit-upload-progress').html(`<img src="${event.image}" class="thumbnail"> - ${currentImageRef.name} <span id="remove-upload">(remove)</span>`);
+
+  event_details.title = $('#edit-event-title').val(`${event.title}`);
+  event_details.date = $('#edit-event-date').val(`${event.date}`);
+  event_details.time = $('#edit-event-time').val(`${event.time}`);
+  event_details.location = $('#edit-event-location').val(`${event.location}`);
+  event_details.cost = $('#edit-event-cost').val(`${event.cost}`);
+  event_details.age = $('#edit-event-age').val(`${event.age}`);
+  event_details.details = $('#edit-event-details').val(`${event.details}`);
+  event_details.links = $('#edit-event-links').val(`${event.links}`);
+  event_details.image = event.image;
+
+  $('#edit-event').submit(function(e) {
+    e.preventDefault();
+    edit_event(event_details, currentEventKey);
+  });
+
+  // close edit modal
+  $('.close-edit-form').click(function() {
+    $('#edit-modal').fadeOut(125);
   });
 }
 
@@ -141,10 +195,22 @@ $(function() {
       let key = $(this).attr('data-key');
       let image = $(this).attr('data-image');
       let ref = firebase.database().ref("events/");
+      console.log(ref);
       if (confirm('Are you sure you want to delete this event?')) {
         delete_event(key, image, ref);
       }
     });
+    // edit event click handler
+    $('.edit-event').click(function() {
+      let key = $(this).attr('data-key');
+      let eventRef = firebase.database().ref(`events/${key}`);
+      // query the db for this event
+      eventRef.on("value", function(snapshot) {
+        // call edit function, pass
+        showEditEventForm(snapshot);
+      });
+    });
+
   }, function (error) {
     console.log("Error: " + error.code);
   });
@@ -193,7 +259,6 @@ $(function() {
 
     // clear image uploadProgress message
     $('#upload-progress').text('');
-
   });
 
 });

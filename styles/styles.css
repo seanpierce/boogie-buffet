@@ -80,7 +80,8 @@ body {
   list-style: none;
   padding: 0;
 }
-.close-overlay {
+.close-overlay,
+.close-edit-form {
   width: 25px;
   cursor: pointer;
   margin-bottom: 1em;
@@ -127,13 +128,15 @@ body {
 .actions a {
   display: block;
 }
-#new-event {
+#new-event,
+#edit-event {
   margin: 1em 0;
   width: 100%;
   background-color: #f5f5f5;
   padding: 1em;
 }
-#new-event input {
+#new-event input,
+#edit-event input {
   display: block;
   margin: 1em 0;
   width: 100%;
@@ -142,7 +145,8 @@ body {
   font-size: 1em;
   background-color: rgba(255, 255, 255, 0);
 }
-#new-event textarea {
+#new-event textarea,
+#edit-event textarea {
   width: 100%;
   height: 100px;
   resize: none;
@@ -151,21 +155,28 @@ body {
 }
 #new-event input:focus,
 #new-event select:focus,
-#new-event textarea:focus {
+#new-event textarea:focus,
+#edit-event input:focus,
+#edit-event select:focus,
+#edit-event textarea:focus {
   outline: none;
 }
 #new-event input::-webkit-input-placeholder,
-#new-event textarea::-webkit-input-placeholder {
+#new-event textarea::-webkit-input-placeholder,
+#edit-event input::-webkit-input-placeholder,
+#edit-event textarea::-webkit-input-placeholder {
   color: #a2a2a2;
 }
-#new-event input[type=submit] {
+#new-event input[type=submit],
+#edit-event input[type=submit] {
   width: auto;
   font-size: 1em;
   border: solid 1px #333;
   background-color: white;
   cursor: pointer;
 }
-#new-event label#file-button-label {
+#new-event label#file-button-label,
+#edit-event label#edit-file-button-label {
   display: inline-block;
   width: auto;
   margin: 1em 0;
@@ -174,17 +185,21 @@ body {
   padding: 5px;
   cursor: pointer;
 }
-#new-event select {
+#new-event select,
+#edit-event select {
   display: block;
   font-size: 1em;
   border: solid 1px #333;
 }
 #new-event input[type="time"]:not(.has-value):before,
-#new-event input[type="date"]:not(.has-value):before {
+#new-event input[type="date"]:not(.has-value):before,
+#edit-event input[type="time"]:not(.has-value):before,
+#edit-event input[type="date"]:not(.has-value):before {
   color: #a2a2a2;
   content: attr(placeholder);
 }
-#cancel-upload {
+#cancel-upload,
+#remove-upload {
   cursor: pointer;
   color: #ec3e41;
 }
@@ -207,11 +222,32 @@ body {
   background-color: #333;
   color: white;
 }
-.delete-event {
+.delete-event,
+.edit-event {
   color: red;
   margin-right: 5px;
   cursor: pointer;
 }
+.edit-event img {
+  height: 1em;
+}
+#edit-modal {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.8);
+  overflow: scroll;
+}
+#edit-modal-content {
+  width: 96%;
+  max-width: 700px;
+  margin: 2em auto;
+}
+
 /* --------------------------------- media queries */
 /* --------------------------------- media queries */
 /* --------------------------------- media queries */

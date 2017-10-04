@@ -36,7 +36,7 @@
         <input type="date" id="new-event-date" placeholder="Date &nbsp;" onchange="this.className=(this.value!=''?'has-value':'')">
         <input type="time" step="60" id="new-event-time" placeholder="Time &nbsp;" onchange="this.className=(this.value!=''?'has-value':'')">
         <input type="text" id="new-event-location" placeholder="Location">
-        <input type="text" id="new-event-cost" placeholder="Cost (leave blank if free)">
+        <input type="text" id="new-event-cost" placeholder="Cost">
         <select id="new-event-age">
           <option value="" selected="selected" disabled>Age Restrictions</option>
           <option value="All Ages">All Ages</option>
@@ -54,9 +54,35 @@
       <hr>
       <a href="#" id="purge-old-events">Purge Old Events</a>
       <br><br>
-      <h4>Delete a single event</h4>
+      <h4>Delete / Edit a single event</h4>
       <ul id="admin-events-list"></ul>
 
+    </div>
+    <div id="edit-modal">
+      <div id="edit-modal-content">
+        <form id="edit-event">
+          <img src="assets/x-333.png" class="close-edit-form">
+          <div id="edit-success-message"></div>
+          <h4>Edit event: <span id="edit-event-title-span"></span></h4>
+          <input type="text" id="edit-event-title" placeholder="Title">
+          <input type="date" id="edit-event-date" placeholder="Date &nbsp;" onchange="this.className=(this.value!=''?'has-value':'')">
+          <input type="time" step="60" id="edit-event-time" placeholder="Time &nbsp;" onchange="this.className=(this.value!=''?'has-value':'')">
+          <input type="text" id="edit-event-location" placeholder="Location">
+          <input type="text" id="edit-event-cost" placeholder="Cost">
+          <select id="edit-event-age">
+            <option value="" selected="selected" disabled>Age Restrictions</option>
+            <option value="All Ages">All Ages</option>
+            <option value="18+">18+</option>
+            <option value="21+">21+</option>
+          </select>
+          <label for="edit-file-button" id="edit-file-button-label">Change image</label>
+          <input type="file" id="edit-file-button" name="edit-file-button" value="upload" style="display:none;">
+          <span id="edit-upload-progress"></span>
+          <textarea id="edit-event-details" placeholder="Event Details"></textarea>
+          <input type="text" id="edit-event-links" placeholder="Links (full urls, separated by commas)">
+          <input type="submit" value="Submit">
+        </form>
+      </div>
     </div>
   </body>
 </html>

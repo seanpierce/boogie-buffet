@@ -28,7 +28,7 @@ let viewEventDetails = function(event) {
     <ul>
       <li>${convertDate(this_event.date)} at ${convertTime(this_event.time)}</li>
       <li>${this_event.location}</li>
-      <li>${(this_event.cost)!=''?'$'+this_event.cost:'Free'}</li>
+      <li>${this_event.cost}</li>
       <li>${this_event.age}</li>
     </ul>
     <p>${this_event.details}</p>

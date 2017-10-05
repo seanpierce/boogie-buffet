@@ -1,3 +1,6 @@
+// instantiate imgURL to use globally
+let imgURL;
+
 // authenticate admin route
 firebase.auth().onAuthStateChanged(user => {
   if (!user) {
@@ -32,6 +35,15 @@ let successMessage = function(eventTitle) {
   }, 10000);
 }
 
+// edit event success message
+let editSuccessMessage = function(eventTitle) {
+  $('#edit-success-message').html(`${eventTitle}, successfully updated!`);
+  setTimeout(function() {
+    // clear success-message
+    $('#edit-success-message').html("");
+  }, 10000);
+}
+
 // upload complete message
 let uploadComplete = function(uploadProgress, filename, imgURL) {
   let fileRef = firebase.storage().ref('images/' + filename);
@@ -47,20 +59,20 @@ let uploadComplete = function(uploadProgress, filename, imgURL) {
 }
 
 // create new event function
-let create_new_event = function(title, date, time, location, cost, age, image, details, links, ref) {
+let create_new_event = function(event_details, image, ref) {
   let newEvent = ref.push();
   if (newEvent.set({
-    title: title,
-    date: date,
-    time: time,
-    location: location,
-    cost: cost,
-    age: age,
-    image: image,
-    details: details,
-    links: links
+    title: event_details.title,
+    date: event_details.date,
+    time: event_details.time,
+    location: event_details.location,
+    cost: event_details.cost,
+    age: event_details.age,
+    details: event_details.details,
+    links: event_details.links,
+    image: image
   })) {
-    successMessage(title);
+    successMessage(event_details.title);
   };
 }
 
@@ -77,9 +89,9 @@ let delete_event = function(key, image, ref) {
 }
 
 // set event edits in database
-let edit_event = function(event_details, currentEventKey) {
+let edit_event = function(event_details, currentEventKey, imgURL) {
   // query db for event using key, set values
-  let updated_event = firebase.database().ref(`events/${currentEventKey}`).set({
+  firebase.database().ref(`events/${currentEventKey}`).set({
     title: event_details.title.val(),
     date: event_details.date.val(),
     time: event_details.time.val(),
@@ -88,22 +100,24 @@ let edit_event = function(event_details, currentEventKey) {
     age: event_details.age.val(),
     details: event_details.details.val(),
     links: event_details.links.val(),
-    image: event_details.image
+    image: imgURL
   });
-  console.log(updated_event);
+  // show success message
+  editSuccessMessage(event_details.title.val());
 }
 
 // show and set values for edit event form
-let showEditEventForm = function(snapshot, ref) {
+let showEditEventForm = function(snapshot) {
   $('#edit-modal').fadeIn(125);
   let currentEventKey = snapshot.key;
   let event = snapshot.val();
+  let imgURL = event.image;
   let currentImageRef = firebase.storage().refFromURL(event.image);
   // create object to store and pass values
   let event_details = new Object();
   // set form values equal to current event values
   $('#edit-event-title-span').text(`${event.title}`);
-  $('#edit-upload-progress').html(`<img src="${event.image}" class="thumbnail"> - ${currentImageRef.name} <span id="remove-upload">(remove)</span>`);
+  $('#edit-event').find('.upload-progress').html(`<img src="${event.image}" class="thumbnail"> - ${currentImageRef.name}`);
 
   event_details.title = $('#edit-event-title').val(`${event.title}`);
   event_details.date = $('#edit-event-date').val(`${event.date}`);
@@ -113,11 +127,20 @@ let showEditEventForm = function(snapshot, ref) {
   event_details.age = $('#edit-event-age').val(`${event.age}`);
   event_details.details = $('#edit-event-details').val(`${event.details}`);
   event_details.links = $('#edit-event-links').val(`${event.links}`);
-  event_details.image = event.image;
+  event_details.image = imgURL;
+
+  // change event image
+  $('#edit-file-button').change(function(e) {
+    let form = $('#edit-event');
+    //TODO: delete current image
+    // uploads image to storage
+    imageUpload(e, form);
+    //TODO: reset current image
+  });
 
   $('#edit-event').submit(function(e) {
     e.preventDefault();
-    edit_event(event_details, currentEventKey);
+    edit_event(event_details, currentEventKey, imgURL);
   });
 
   // close edit modal
@@ -138,12 +161,9 @@ let purgeOldEvents = function(events) {
   });
 }
 
-// instantiate image url for form submission
-let imgURL;
-
 // image upload functionality
-let imageUpload = function(e) {
-  let uploadProgress = $('#upload-progress');
+let imageUpload = function(e, form) {
+  let uploadProgress = form.find('.upload-progress');
   // get file (variable declared above, for use later)
   let file = e.target.files[0];
   // create storage ref
@@ -154,7 +174,6 @@ let imageUpload = function(e) {
   task.on('state_changed',
     function progress(snapshot) {
       let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      uploadProgress.css('color', 'inherit');
       uploadProgress.text(Math.floor(percentage) + '%');
     },
     function error(err) {
@@ -195,7 +214,6 @@ $(function() {
       let key = $(this).attr('data-key');
       let image = $(this).attr('data-image');
       let ref = firebase.database().ref("events/");
-      console.log(ref);
       if (confirm('Are you sure you want to delete this event?')) {
         delete_event(key, image, ref);
       }
@@ -230,27 +248,29 @@ $(function() {
   });
 
   let fileButton = $('#file-button');
-  // listen for file selection
+  // listen for new event image selection
   fileButton.change(function(e) {
-    imageUpload(e);
+    let form = $('#new-event');
+    imageUpload(e, form);
     confirmRefresh(fileButton);
   });
 
   // submit new event to database
   $('#new-event').submit(function(e) {
     e.preventDefault();
+    // create event details object
+    let event_details = new Object;
     // get input values
-    let title = $('#new-event-title').val();
-    let date = $('#new-event-date').val();
-    let time = $('#new-event-time').val();
-    let location = $('#new-event-location').val();
-    let cost = $('#new-event-cost').val();
-    let age = $('#new-event-age').val();
-    // image comes from the imgURL variable declared above
-    let details = $('#new-event-details').val();
-    let links = $('#new-event-links').val();
-
-    create_new_event(title, date, time, location, cost, age, imgURL, details, links, ref);
+    event_details.title = $('#new-event-title').val();
+    event_details.date = $('#new-event-date').val();
+    event_details.time = $('#new-event-time').val();
+    event_details.location = $('#new-event-location').val();
+    event_details.cost = $('#new-event-cost').val();
+    event_details.age = $('#new-event-age').val();
+    event_details.details = $('#new-event-details').val();
+    event_details.links = $('#new-event-links').val();
+    // image comes from the imgURL variable declared globally
+    create_new_event(event_details, imgURL, ref);
 
     // clear form inputs
     $('#new-event')[0].reset();
@@ -258,7 +278,7 @@ $(function() {
     $('#new-event-time').removeClass('has-value');
 
     // clear image uploadProgress message
-    $('#upload-progress').text('');
+    $('.upload-progress').text('');
   });
 
 });

@@ -30,7 +30,7 @@
       </div>
 
       <form id="new-event">
-        <div id="success-message"></div>
+        <div id="success-message" class="green"></div>
         <h4>Add a new event</h4>
         <input type="text" id="new-event-title" placeholder="Title">
         <input type="date" id="new-event-date" placeholder="Date &nbsp;" onchange="this.className=(this.value!=''?'has-value':'')">
@@ -45,7 +45,7 @@
         </select>
         <label for="file-button" id="file-button-label">Upload an image</label>
         <input type="file" id="file-button" name="file-button" value="upload" required style="display:none;">
-        <span class="upload-progress"></span>
+        <span class="upload-progress green"></span>
         <textarea id="new-event-details" placeholder="Event Details"></textarea>
         <input type="text" id="new-event-links" placeholder="Links (full urls, separated by commas)">
         <input type="submit" value="Submit">
@@ -62,7 +62,7 @@
       <div id="edit-modal-content">
         <form id="edit-event">
           <img src="assets/x-333.png" class="close-edit-form">
-          <div id="edit-success-message"></div>
+          <div id="edit-success-message" class="green"></div>
           <h4>Edit event: <span id="edit-event-title-span"></span></h4>
           <input type="text" id="edit-event-title" placeholder="Title">
           <input type="date" id="edit-event-date" placeholder="Date &nbsp;" onchange="this.className=(this.value!=''?'has-value':'')">
@@ -77,7 +77,7 @@
           </select>
           <label for="edit-file-button" id="edit-file-button-label">Change image</label>
           <input type="file" id="edit-file-button" name="edit-file-button" value="upload" style="display:none;">
-          <span class="upload-progress"></span>
+          <span class="upload-progress green"></span>
           <textarea id="edit-event-details" placeholder="Event Details"></textarea>
           <input type="text" id="edit-event-links" placeholder="Links (full urls, separated by commas)">
           <input type="submit" value="Submit">

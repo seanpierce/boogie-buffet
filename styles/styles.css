@@ -13,6 +13,9 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.container {
+  transition: all 0.25s;
+}
 
 /* --------------------------------- index styles */
 /* --------------------------------- index styles */
@@ -198,12 +201,11 @@ body {
   color: #a2a2a2;
   content: attr(placeholder);
 }
-#cancel-upload,
-#remove-upload {
+#cancel-upload {
   cursor: pointer;
   color: #ec3e41;
 }
-#success-message {
+.green {
   color: green;
 }
 .thumbnail {

@@ -89,7 +89,8 @@ let delete_event = function(key, image, ref) {
 }
 
 // set event edits in database
-let edit_event = function(event_details, currentEventKey, imgURL) {
+let edit_event = function(event_details, currentEventKey, image) {
+  console.log(image);
   // query db for event using key, set values
   firebase.database().ref(`events/${currentEventKey}`).set({
     title: event_details.title.val(),
@@ -100,7 +101,7 @@ let edit_event = function(event_details, currentEventKey, imgURL) {
     age: event_details.age.val(),
     details: event_details.details.val(),
     links: event_details.links.val(),
-    image: imgURL
+    image: image
   });
   // show success message
   editSuccessMessage(event_details.title.val());
@@ -111,7 +112,6 @@ let showEditEventForm = function(snapshot) {
   $('#edit-modal').fadeIn(125);
   let currentEventKey = snapshot.key;
   let event = snapshot.val();
-  let imgURL = event.image;
   let currentImageRef = firebase.storage().refFromURL(event.image);
   // create object to store and pass values
   let event_details = new Object();
@@ -127,7 +127,7 @@ let showEditEventForm = function(snapshot) {
   event_details.age = $('#edit-event-age').val(`${event.age}`);
   event_details.details = $('#edit-event-details').val(`${event.details}`);
   event_details.links = $('#edit-event-links').val(`${event.links}`);
-  event_details.image = imgURL;
+  event_details.image = event.image;
 
   // change event image
   $('#edit-file-button').change(function(e) {
@@ -140,6 +140,7 @@ let showEditEventForm = function(snapshot) {
 
   $('#edit-event').submit(function(e) {
     e.preventDefault();
+    console.log(imgURL);
     edit_event(event_details, currentEventKey, imgURL);
   });
 

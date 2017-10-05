@@ -90,9 +90,16 @@ let delete_event = function(key, image, ref) {
 
 // set event edits in database
 let edit_event = function(event_details, currentEventKey, image) {
-  console.log(image);
-  // query db for event using key, set values
-  firebase.database().ref(`events/${currentEventKey}`).set({
+  // query db for event using key
+  this_event = firebase.database().ref(`events/${currentEventKey}`);
+  // check if image is undefined (not updated)
+  if (image == null) {
+    this_event.on("value", function(snapshot) {
+      image = snapshot.val().image;
+    });
+  }
+  // set values
+  this_event.set({
     title: event_details.title.val(),
     date: event_details.date.val(),
     time: event_details.time.val(),
@@ -140,7 +147,6 @@ let showEditEventForm = function(snapshot) {
 
   $('#edit-event').submit(function(e) {
     e.preventDefault();
-    console.log(imgURL);
     edit_event(event_details, currentEventKey, imgURL);
   });
 

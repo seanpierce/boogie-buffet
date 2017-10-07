@@ -46,7 +46,7 @@ let editSuccessMessage = function(eventTitle) {
 
 // upload complete message
 let uploadComplete = function(uploadProgress, filename, imgURL) {
-  let fileRef = firebase.storage().ref('images/' + filename);
+  let fileRef = firebase.storage().refFromURL(imgURL);
   uploadProgress.html(`<img src="${imgURL}" class="thumbnail"> - ${filename} <span id="cancel-upload">(cancel)</span>`);
   // cancel (delete) uploaded file
   $('#cancel-upload').click(function() {
@@ -89,11 +89,11 @@ let delete_event = function(key, image, ref) {
 }
 
 // set event edits in database
-let edit_event = function(event_details, currentEventKey, image) {
+let edit_event = function(event_details, currentEventKey, newImage) {
   // query db for event using key
   this_event = firebase.database().ref(`events/${currentEventKey}`);
   // check if image is undefined (not updated)
-  if (image == null) {
+  if (newImage == null) {
     this_event.on("value", function(snapshot) {
       image = snapshot.val().image;
     });
@@ -108,7 +108,7 @@ let edit_event = function(event_details, currentEventKey, image) {
     age: event_details.age.val(),
     details: event_details.details.val(),
     links: event_details.links.val(),
-    image: image
+    image: newImage
   });
   // show success message
   editSuccessMessage(event_details.title.val());
@@ -139,10 +139,7 @@ let showEditEventForm = function(snapshot) {
   // change event image
   $('#edit-file-button').change(function(e) {
     let form = $('#edit-event');
-    //TODO: delete current image
-    // uploads image to storage
     imageUpload(e, form);
-    //TODO: reset current image
   });
 
   $('#edit-event').submit(function(e) {
@@ -153,6 +150,7 @@ let showEditEventForm = function(snapshot) {
   // close edit modal
   $('.close-edit-form').click(function() {
     $('#edit-modal').fadeOut(125);
+    $('#edit-event')[0].reset();
   });
 }
 
@@ -168,13 +166,19 @@ let purgeOldEvents = function(events) {
   });
 }
 
+// generate unique id for images
+let guid = function() {
+  function num() {
+    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+  }
+  return `${num()}${num()}-${num()}-${num()}-${num()}-${num()}${num()}${num()}`
+}
+
 // image upload functionality
 let imageUpload = function(e, form) {
   let uploadProgress = form.find('.upload-progress');
-  // get file (variable declared above, for use later)
   let file = e.target.files[0];
-  // create storage ref
-  let storageRef = firebase.storage().ref('images/' + file.name);
+  let storageRef = firebase.storage().ref(`images/${guid()}/${file.name}`);
   // upload file
   let task = storageRef.put(file);
   // update progress bar
@@ -230,7 +234,7 @@ $(function() {
       let key = $(this).attr('data-key');
       let eventRef = firebase.database().ref(`events/${key}`);
       // query the db for this event
-      eventRef.on("value", function(snapshot) {
+      eventRef.once("value", function(snapshot) {
         // call edit function, pass
         showEditEventForm(snapshot);
       });

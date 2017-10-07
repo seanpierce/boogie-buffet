@@ -1,6 +1,3 @@
-// instantiate imgURL to use globally
-let imgURL;
-
 // authenticate admin route
 firebase.auth().onAuthStateChanged(user => {
   if (!user) {
@@ -59,7 +56,7 @@ let uploadComplete = function(uploadProgress, filename, imgURL) {
 }
 
 // create new event function
-let create_new_event = function(event_details, image, ref) {
+let create_new_event = function(event_details, ref) {
   let newEvent = ref.push();
   if (newEvent.set({
     title: event_details.title,
@@ -69,8 +66,7 @@ let create_new_event = function(event_details, image, ref) {
     cost: event_details.cost,
     age: event_details.age,
     details: event_details.details,
-    links: event_details.links,
-    image: image
+    image: event_details.image
   })) {
     successMessage(event_details.title);
   };
@@ -89,15 +85,10 @@ let delete_event = function(key, image, ref) {
 }
 
 // set event edits in database
-let edit_event = function(event_details, currentEventKey, newImage) {
+let edit_event = function(event_details, currentEventKey) {
   // query db for event using key
   this_event = firebase.database().ref(`events/${currentEventKey}`);
-  // check if image is undefined (not updated)
-  if (newImage == null) {
-    this_event.on("value", function(snapshot) {
-      image = snapshot.val().image;
-    });
-  }
+
   // set values
   this_event.set({
     title: event_details.title.val(),
@@ -107,8 +98,7 @@ let edit_event = function(event_details, currentEventKey, newImage) {
     cost: event_details.cost.val(),
     age: event_details.age.val(),
     details: event_details.details.val(),
-    links: event_details.links.val(),
-    image: newImage
+    image: event_details.image.val()
   });
   // show success message
   editSuccessMessage(event_details.title.val());
@@ -133,8 +123,7 @@ let showEditEventForm = function(snapshot) {
   event_details.cost = $('#edit-event-cost').val(`${event.cost}`);
   event_details.age = $('#edit-event-age').val(`${event.age}`);
   event_details.details = $('#edit-event-details').val(`${event.details}`);
-  event_details.links = $('#edit-event-links').val(`${event.links}`);
-  event_details.image = event.image;
+  event_details.image = $('#edit-event-image').val(`${event.image}`);
 
   // change event image
   $('#edit-file-button').change(function(e) {
@@ -144,7 +133,7 @@ let showEditEventForm = function(snapshot) {
 
   $('#edit-event').submit(function(e) {
     e.preventDefault();
-    edit_event(event_details, currentEventKey, imgURL);
+    edit_event(event_details, currentEventKey);
   });
 
   // close edit modal
@@ -177,8 +166,14 @@ let guid = function() {
 // image upload functionality
 let imageUpload = function(e, form) {
   let uploadProgress = form.find('.upload-progress');
+  let imageInput = form.find('.image-upload-data');
   let file = e.target.files[0];
-  let storageRef = firebase.storage().ref(`images/${guid()}/${file.name}`);
+  let imageUID = guid();
+  let storageRef = firebase.storage().ref(`images/${imageUID}/${file.name}`);
+
+  // set data-uid for hidden input
+  imageInput.attr('data-uid', imageUID)
+
   // upload file
   let task = storageRef.put(file);
   // update progress bar
@@ -192,7 +187,8 @@ let imageUpload = function(e, form) {
     },
     function complete() {
       // once finished, set image url for form submission
-      imgURL = task.snapshot.downloadURL;
+      let imgURL = task.snapshot.downloadURL;
+      imageInput.val(imgURL);
       uploadComplete(uploadProgress, file.name, imgURL);
     }
   );
@@ -279,9 +275,9 @@ $(function() {
     event_details.cost = $('#new-event-cost').val();
     event_details.age = $('#new-event-age').val();
     event_details.details = $('#new-event-details').val();
-    event_details.links = $('#new-event-links').val();
-    // image comes from the imgURL variable declared globally
-    create_new_event(event_details, imgURL, ref);
+    event_details.image = $('#new-event-image').val();
+
+    create_new_event(event_details, ref);
 
     // clear form inputs
     $('#new-event')[0].reset();

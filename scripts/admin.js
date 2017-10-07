@@ -131,15 +131,17 @@ let showEditEventForm = function(snapshot) {
     imageUpload(e, form);
   });
 
+  // submit edit event
   $('#edit-event').submit(function(e) {
     e.preventDefault();
     edit_event(event_details, currentEventKey);
   });
 
-  // close edit modal
+  // close edit modal, reset input values
   $('.close-edit-form').click(function() {
     $('#edit-modal').fadeOut(125);
     $('#edit-event')[0].reset();
+    $('.image-upload-data').val('');
   });
 }
 
@@ -281,6 +283,7 @@ $(function() {
 
     // clear form inputs
     $('#new-event')[0].reset();
+    $('.image-upload-data').val();
     $('#new-event-date').removeClass('has-value');
     $('#new-event-time').removeClass('has-value');
 

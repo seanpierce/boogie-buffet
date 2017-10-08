@@ -209,7 +209,7 @@ let confirmRefresh = function(fileButton) {
 // ------------------------------ document ready
 // ------------------------------ document ready
 
-$(function() {
+$(() => {
   let now = Date.now();
   ref.orderByChild('date').on("value", function(snapshot) {
     // clear admin events list

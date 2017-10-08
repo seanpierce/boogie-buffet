@@ -36,11 +36,31 @@ let viewEventDetails = function(event) {
   );
 }
 
+// initialize shrimpy disco track
+let track = new Audio();
+let trackIsPlaying = false;
+track.src = 'assets/shrimpy.mp3';
+track.loop = true;
+
+// toggle shrimpy disco
+let shrimpyDisco = () => {
+  $('body').toggleClass('black');
+  $('#shrimpy-disco').toggleClass('shrimpy-disco');
+  if (!trackIsPlaying) {
+    trackIsPlaying = true;
+    track.play();
+  } else {
+    trackIsPlaying = false;
+    track.currentTime = 0;
+    track.pause();
+  }
+}
+
 // ------------------------------ document ready
 // ------------------------------ document ready
 // ------------------------------ document ready
 
-$(function() {
+$(() => {
   let now = Date.now();
   // retrieve events by date
   ref.orderByChild('date').on('value', function(snapshot) {
@@ -80,5 +100,10 @@ $(function() {
     });
   }, function (error) {
     console.log("Error: " + error.code);
+  });
+
+  // toggle shrimpy disco on click
+  $('.shrimpy').click( () => {
+    shrimpyDisco();
   });
 });

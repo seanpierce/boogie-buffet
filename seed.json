@@ -1,0 +1,14 @@
+{
+  "events" : {
+    "-testtesttest" : {
+      "date" : "04\/20\/2018",
+      "time" : "09:00 PM",
+      "location" : "Venue Name",
+      "title" : "My Cool Event",
+      "age" : "All Ages",
+      "cost" : "$8",
+      "details" : "This is just a test event. You'll add more events through the admin page. Or you can edit this one!",
+      "image" : "http://lorempixel.com/output/nightlife-q-c-640-480-2.jpg"
+    }
+  }
+}

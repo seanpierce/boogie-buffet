@@ -6,7 +6,7 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
-$(function() {
+$(() => {
 
   // get elements
   const emailInput = $('#email-input');

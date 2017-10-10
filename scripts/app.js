@@ -31,7 +31,7 @@ let viewEventDetails = function(event) {
       <li>${this_event.cost}</li>
       <li>${this_event.age}</li>
     </ul>
-    <p>${this_event.details}</p>
+    <p class="details">${this_event.details}</p>
     `
   );
 }

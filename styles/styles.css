@@ -24,6 +24,9 @@ body {
   float: none;
   margin: 0 auto;
 }
+.details {
+  white-space: pre-wrap;
+}
 
 /* --------------------------------- index styles */
 /* --------------------------------- index styles */

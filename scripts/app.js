@@ -49,11 +49,24 @@ let shrimpyDisco = () => {
   if (!trackIsPlaying) {
     trackIsPlaying = true;
     track.play();
+    curtainsOut();
   } else {
     trackIsPlaying = false;
     track.currentTime = 0;
     track.pause();
+    curtainsIn();
   }
+}
+
+// move curtains on shrimpy disco toggle
+let curtainsOut = () => {
+  let offset = $('.curtain-l').width() + 20;
+  $('.curtain-l').css('transform', 'translateX(-' + offset + 'px)');
+  $('.curtain-r').css('transform', 'translateX(' + offset + 'px)');
+}
+let curtainsIn = () => {
+  $('.curtain-l').css('transform', 'translateX(0px)');
+  $('.curtain-r').css('transform', 'translateX(0px)');
 }
 
 // ------------------------------ document ready
@@ -105,5 +118,12 @@ $(() => {
   // toggle shrimpy disco on click
   $('.shrimpy').click( () => {
     shrimpyDisco();
+  });
+  // toggle shrimpy eating that burg'
+  $('.shrimpy').mouseover(() => {
+    $('.shrimpy').attr('src', 'assets/shrimpy-bite.png');
+  });
+  $('.shrimpy').mouseout(() => {
+    $('.shrimpy').attr('src', 'assets/shrimpy.png');
   });
 });

@@ -38,8 +38,10 @@ let viewEventDetails = function(event) {
 
 // initialize shrimpy disco track
 let track = new Audio();
+let stop = new Audio();
 let trackIsPlaying = false;
 track.src = 'assets/shrimpy.mp3';
+stop.src = 'assets/stop.mp3'
 track.loop = true;
 
 // toggle shrimpy disco
@@ -54,6 +56,7 @@ let shrimpyDisco = () => {
     trackIsPlaying = false;
     track.currentTime = 0;
     track.pause();
+    stop.play();
     curtainsIn();
   }
 }
@@ -79,6 +82,8 @@ $(() => {
   ref.orderByChild('date').on('value', function(snapshot) {
     // hide loading animation
     $('#loading').hide();
+    // show content
+    $('.container').removeClass('wait');
     // erase all prev events
     $('.event').remove();
     // create past events array
@@ -122,8 +127,8 @@ $(() => {
   // toggle shrimpy eating that burg'
   $('.shrimpy').mouseover(() => {
     $('.shrimpy').attr('src', 'assets/shrimpy-bite.png');
-  });
-  $('.shrimpy').mouseout(() => {
-    $('.shrimpy').attr('src', 'assets/shrimpy.png');
+    setTimeout(() => {
+      $('.shrimpy').attr('src', 'assets/shrimpy.png');
+    }, 300);
   });
 });

@@ -27,7 +27,9 @@ body {
 .details {
   white-space: pre-wrap;
 }
-
+.wait {
+  display: none;
+}
 /* --------------------------------- index styles */
 /* --------------------------------- index styles */
 /* --------------------------------- index styles */

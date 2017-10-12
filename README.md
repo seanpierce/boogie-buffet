@@ -26,4 +26,4 @@ let ref = firebase.database().ref("events/");
 ```
 
 
-<img src="assets/lil-shrimp-01.png">
+<img src="assets/lil-shrimpy.png">

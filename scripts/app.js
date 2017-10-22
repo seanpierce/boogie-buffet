@@ -38,15 +38,14 @@ let viewEventDetails = function(event) {
 
 // initialize shrimpy disco track
 let track = new Audio();
-let stop = new Audio();
 let trackIsPlaying = false;
 track.src = 'assets/shrimpy.mp3';
-stop.src = 'assets/stop.mp3'
 track.loop = true;
 
 // toggle shrimpy disco
 let shrimpyDisco = () => {
   $('body').toggleClass('black');
+  $('.event').toggleClass('white-boarder');
   $('#shrimpy-disco').toggleClass('shrimpy-disco');
   if (!trackIsPlaying) {
     trackIsPlaying = true;
@@ -56,7 +55,6 @@ let shrimpyDisco = () => {
     trackIsPlaying = false;
     track.currentTime = 0;
     track.pause();
-    stop.play();
     curtainsIn();
   }
 }

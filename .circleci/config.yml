@@ -1,0 +1,8 @@
+version: 1
+jobs:
+   build:
+     docker:
+       - image: circleci/html:1
+     steps:
+       - checkout
+       - run: echo "hello world"

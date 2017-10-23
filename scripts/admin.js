@@ -24,11 +24,24 @@ let adminEventDisplay = function(event) {
 }
 
 // add new event success message
-let successMessage = function(eventTitle) {
+let successMessage = eventTitle => {
+  // clear all other messages
+  $('.message').empty();
   $('#success-message').html(`${eventTitle}, successfully added!`);
   setTimeout(function() {
     // clear success-message
-    $('#success-message').html("");
+    $('#success-message').empty();
+  }, 10000);
+}
+
+// event warning message// add new event success message
+let warningMessage = () => {
+  // clear all other messages
+  $('.message').empty();
+  $('#warning-message').html(`Please upload an image!`);
+  setTimeout(function() {
+    // clear success-message
+    $('#warning-message').empty();
   }, 10000);
 }
 
@@ -265,30 +278,35 @@ $(() => {
   });
 
   // submit new event to database
-  $('#new-event').submit(function(e) {
-    e.preventDefault();
-    // create event details object
-    let event_details = new Object;
-    // get input values
-    event_details.title = $('#new-event-title').val();
-    event_details.date = $('#new-event-date').val();
-    event_details.time = $('#new-event-time').val();
-    event_details.location = $('#new-event-location').val();
-    event_details.cost = $('#new-event-cost').val();
-    event_details.age = $('#new-event-age').val();
-    event_details.details = $('#new-event-details').val();
-    event_details.image = $('#new-event-image').val();
+    $('#new-event').submit(function(e) {
+      e.preventDefault();
+      // if a valid image was uploaded...
+      if ($('#new-event-image').val()) {
+        // create event details object
+        let event_details = new Object;
+        // get input values
+        event_details.title = $('#new-event-title').val();
+        event_details.date = $('#new-event-date').val();
+        event_details.time = $('#new-event-time').val();
+        event_details.location = $('#new-event-location').val();
+        event_details.cost = $('#new-event-cost').val();
+        event_details.age = $('#new-event-age').val();
+        event_details.details = $('#new-event-details').val();
+        event_details.image = $('#new-event-image').val();
 
-    create_new_event(event_details, ref);
+        create_new_event(event_details, ref);
 
-    // clear form inputs
-    $('#new-event')[0].reset();
-    $('.image-upload-data').val();
-    $('#new-event-date').removeClass('has-value');
-    $('#new-event-time').removeClass('has-value');
+        // clear form inputs
+        $('#new-event')[0].reset();
+        $('.image-upload-data').val();
+        $('#new-event-date').removeClass('has-value');
+        $('#new-event-time').removeClass('has-value');
 
-    // clear image uploadProgress message
-    $('.upload-progress').text('');
-  });
-
+        // clear image uploadProgress message
+        $('.upload-progress').empty();
+      } else {
+        // present warning message for user to upload an image
+        warningMessage();
+      }
+    });
 });

@@ -23,15 +23,15 @@ let viewEventDetails = function(event) {
   $('#overlay-content').html(
     `
     <img src="assets/x.png" class="close-overlay">
-    <img src="${this_event.image}" class="event-image">
-    <h1>${this_event.title}</h1>
+    <img src="${this_event.image && this_event.image}" class="event-image">
+    <h1>${this_event.title && this_event.title}</h1>
     <ul>
-      <li>${convertDate(this_event.date)} at ${convertTime(this_event.time)}</li>
-      <li>${this_event.location}</li>
-      <li>${this_event.cost}</li>
-      <li>${this_event.age}</li>
+      <li>${this_event.date && convertDate(this_event.date)}${(this_event.date && this_event.time)? " at ":""}${this_event.time && convertTime(this_event.time)}</li>
+      <li>${this_event.location && this_event.location}</li>
+      <li>${this_event.cost && this_event.cost}</li>
+      <li>${this_event.age && this_event.age}</li>
     </ul>
-    <p class="details">${this_event.details}</p>
+    <p class="details">${this_event.details && this_event.details}</p>
     `
   );
 }

@@ -163,9 +163,6 @@ body {
 /* --------------------------------- admin styles */
 /* --------------------------------- admin styles */
 
-.actions a {
-  display: block;
-}
 #new-event,
 #edit-event {
   margin: 1em 0;
@@ -242,6 +239,9 @@ body {
 }
 .green {
   color: green;
+}
+.red {
+  color: red;
 }
 .thumbnail {
   height: 2em;
